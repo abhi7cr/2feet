@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "twofeet-37b33",
+    "staging": "twofeet-37b33"
+  }
+}

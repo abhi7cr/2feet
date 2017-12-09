@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+ <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+ <meta content="utf-8" http-equiv="encoding">
+</head>
+<h2 style="text-align: center">Welcome to UDance Network</h3>
+<h3> Click on Browse to upload your dance video
+<body>
+<button id="browse" onclick="browse()">Browse</button>
+<input type ="file" id="file" style="display: none" onchange="onfileUpload()">
+<!--<button id="load" onclick="load()">Load</button>-->
+<!--<video width="800" controls id="video" style="display:none">
+  <source src="" type="video/mp4">
+  Your browser does not support HTML5 video.
+</video>-->
+<div class="flexWrapper" id="wrapper">
+</div>
+<script>
+let i = 0
+function browse () {
+ document.getElementById('file').click();
+}
+function onfileUpload () {
+  let f = document.getElementById("file");
+  var fragment = document.createDocumentFragment();
+  var col = document.createElement('div')
+  col.id = 'col_' + i
+  i++;
+  col.classList.add('item');
+  var label = document.createElement('span');
+  label.innerText = f.files[0].name;
+  col.appendChild(label)
+  var video = document.createElement('video');
+  video.id = 'video_' + i
+  video.style.width = 500 + 'px'
+  var fileURL = URL.createObjectURL(f.files[0]);
+  video.src = fileURL;
+  video.style.display = "block";
+  col.appendChild(video)
+  fragment.appendChild(col)
+  //document.getElementById('fileName').innerText = f.files[0].name;
+  document.getElementById('wrapper').appendChild(fragment)
+  document.getElementById('video_'+ i).setAttribute('controls', 'controls')
+}
+</script>
+<link rel="stylesheet" href="grid.css"/>
+<style>
+button {
+ text-align: center;
+ background-color: orange;
+ border-radius: 25px;
+ width: 100px;
+ height: 50px;
+}
+button:hover {
+    background-color: orangered;
+ }
+ #load {
+  background-color: greenyellow;
+ }
+ #load:hover {
+    background-color: green;
+ }
+</style>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "2feet",
+  "version": "1.0.0",
+  "description": "learn dance as you always wanted to",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "abhi and avi",
+  "license": "ISC"
+}
