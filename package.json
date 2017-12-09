@@ -4,8 +4,13 @@
   "description": "learn dance as you always wanted to",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
+    "deploy": "firebase deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "abhi and avi",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
 }
