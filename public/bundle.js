@@ -71,11 +71,13 @@ var TwoFeet =
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileOps_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__login_js__ = __webpack_require__(2);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "browse", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "onFileUpload", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["c"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "fbLogin", function() { return __WEBPACK_IMPORTED_MODULE_1__login_js__["a"]; });
 
-console.log(__WEBPACK_IMPORTED_MODULE_0__fileOps_js__["b" /* i */])
+
 
 
 /***/ }),
@@ -111,6 +113,40 @@ function onFileUpload() {
     fragment.appendChild(col)
     document.getElementById('wrapper').appendChild(fragment)
     document.getElementById('video_' + i).setAttribute('controls', 'controls')
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return fbLogin; });
+function fbLogin() {
+    var provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('user_birthday');
+    firebase.auth().useDeviceLanguage();
+    provider.setCustomParameters({
+        'display': 'popup'
+    });
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        document.getElementById('wrapper').style.display = "block";
+        document.getElementById('loginBtn').style.display = "none";
+        // ...
+    }).catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+    });
 }
 
 

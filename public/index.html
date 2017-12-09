@@ -5,10 +5,12 @@
  <meta content="utf-8" http-equiv="encoding">
 </head>
 <h2 style="text-align: center">Welcome to UDance Network</h2>
-<h5> Click on <a href="#" onclick="TwoFeet.browse()">Browse</a> to upload your dance video </h5>
 <body>
+  <div id="spa">
 <input type ="file" id="file" style="display: none" onchange="TwoFeet.onFileUpload()">
-<div class="flexWrapper" id="wrapper">
+<div class="flexWrapper" id="wrapper" style="display: none">
+  <h5> Click on <a href="#" onclick="TwoFeet.browse()">Browse</a> to upload your dance video </h5>
+</div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script>
@@ -23,9 +25,18 @@
   };
   firebase.initializeApp(config);
 </script>
-<script src = "bundle.js"></script>
+<template id="login">
+    <button id="loginBtn" onclick="TwoFeet.fbLogin()">Login</button>
+</template>
+<!--<link rel="import" href="login.html">-->
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
 <link rel="stylesheet" href="grid.css"/>
+<script src = "bundle.js"></script>
+<script>
+  var t = document.querySelector('#login');
+  var clone = document.importNode(t.content, true);
+  document.body.appendChild(clone);  
+  </script>
 <style>
 button {
  text-align: center;
@@ -48,7 +59,7 @@ button:hover {
    font-weight: 300;
  }
  body {
-   font-size: 3vh;
+   /*font-size: 3vh;*/
    font-family: 'Raleway', 'cursive';
    font-weight: 200;
    background-color: aliceblue;

@@ -1,3 +1,3 @@
 import {i, browse, onFileUpload} from './fileOps.js'
-console.log(i)
-export {i, browse, onFileUpload}
+import {fbLogin} from './login.js'
+export {i, browse, onFileUpload, fbLogin}
