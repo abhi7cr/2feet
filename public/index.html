@@ -7,12 +7,15 @@
 <h2 style="text-align: center">Welcome to UDance Network</h2>
 <body>
   <div id="spa">
+    <p id="userName"></p>
+    <img id="profilePic"></img>
 <input type ="file" id="file" style="display: none" onchange="TwoFeet.onFileUpload()">
+ <h5 id="browse" style="display: none"> Click on <a href="#" onclick="TwoFeet.browse()">Browse</a> to upload your dance video </h5>
 <div class="flexWrapper" id="wrapper" style="display: none">
-  <h5> Click on <a href="#" onclick="TwoFeet.browse()">Browse</a> to upload your dance video </h5>
 </div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase-firestore.js"></script>
 <script>
   // Initialize Firebase
   var config = {
@@ -27,6 +30,7 @@
 </script>
 <template id="login">
     <button id="loginBtn" onclick="TwoFeet.fbLogin()">Login</button>
+    <button id="logoutBtn" style="display: none;" onclick="TwoFeet.fbLogout()">Logout</button>
 </template>
 <!--<link rel="import" href="login.html">-->
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
@@ -45,6 +49,12 @@ button {
  width: 100px;
  height: 50px;
 }
+.uploadBtn {
+  background-color:green;
+}
+.uploadBtn:hover {
+  background-color:darkgreen;
+}
 button:hover {
     background-color: orangered;
  }
@@ -59,7 +69,7 @@ button:hover {
    font-weight: 300;
  }
  body {
-   /*font-size: 3vh;*/
+   font-size: 3vh;
    font-family: 'Raleway', 'cursive';
    font-weight: 200;
    background-color: aliceblue;

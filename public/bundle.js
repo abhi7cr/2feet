@@ -61,7 +61,7 @@ var TwoFeet =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -69,15 +69,115 @@ var TwoFeet =
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileOps_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__login_js__ = __webpack_require__(2);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["b"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "browse", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "onFileUpload", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["c"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "fbLogin", function() { return __WEBPACK_IMPORTED_MODULE_1__login_js__["a"]; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return i; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return browse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return onFileUpload; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return uploadToFirebase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getAllVideos; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login__ = __webpack_require__(1);
 
-
+let i = 0
+function browse() {
+    document.getElementById('file').click();
+}
+function onFileUpload(dbVideo) {
+    var fragment = document.createDocumentFragment();
+    var col = document.createElement('div')
+    //Preview Mode
+    if (!dbVideo) {
+        let f = document.getElementById("file");
+        var fileURL = URL.createObjectURL(f.files[0])
+        col.id = 'colPreview'
+        col.classList.add('item');
+        col.style.width = '100%'
+        var label = document.createElement('span');
+        label.innerText = 'Preview: ' + f.files[0].name;
+        col.appendChild(label)
+        var video = document.createElement('video');
+        video.id = 'videoPreview'
+        video.style.width = '50%'
+        video.style.alignSelf = 'center'
+        video.src = fileURL;
+        video.style.display = "block";
+        var btn = document.createElement('button')
+        btn.addEventListener('click', uploadToFirebase)
+        btn.id = 'uploadBtn'
+        btn.classList.add('uploadBtn')
+        btn.innerText = 'Upload'
+        col.appendChild(btn)
+        col.appendChild(video)
+        fragment.appendChild(col)
+        document.getElementById('wrapper').appendChild(fragment)
+        document.getElementById('videoPreview').setAttribute('controls', 'controls')
+    }
+    //Uploaded videos
+    else {
+        col.id = 'col_' + i
+        col.classList.add('item');
+        col.style.width = '40%'
+        var label = document.createElement('span');
+        label.innerText = dbVideo.name;
+        col.appendChild(label)
+        var video = document.createElement('video');
+        video.id = 'video_' + i
+        video.style.width = '90%'
+        video.src = dbVideo.url;
+        video.style.display = "block";
+        col.appendChild(video)
+        fragment.appendChild(col)
+        document.getElementById('wrapper').appendChild(fragment)
+        document.getElementById('video_' + i).setAttribute('controls', 'controls')
+        i++;
+    }
+}
+function uploadToFirebase(e) {
+    var uid = Object(__WEBPACK_IMPORTED_MODULE_0__login__["c" /* getUserInfo */])().uid;
+    var f = document.getElementById("file").files[0];
+    // Create a root reference
+    var storageRef = firebase.storage().ref();
+    var videoRef = storageRef.child(uid + '/' + f.name);
+    videoRef.put(f).then(function (snapshot) {
+        console.log('Uploaded a blob or file!');
+        alert('file uploaded successfully!')
+        // Initialize Cloud Firestore through Firebase
+        var db = firebase.firestore();
+        db.collection("videos_" + uid).add({
+            url: snapshot.downloadURL,
+            name: f.name,
+            uid: uid
+        })
+            .then(function (docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function (error) {
+                console.error("Error adding document: ", error);
+            });
+    });
+}
+function removeContainer() {
+    let container = document.getElementById("wrapper");
+    while (container.hasChildNodes()) {
+        container.removeChild(container.lastChild);
+    }
+}
+function getAllVideos() {
+    i = 0
+    removeContainer()
+    var user = Object(__WEBPACK_IMPORTED_MODULE_0__login__["c" /* getUserInfo */])()
+    var db = firebase.firestore();
+    var docRef = db.collection("videos_" + user.uid);
+    docRef.where('uid', '==', user.uid).get().then(function (querySnapshot) {
+        querySnapshot.forEach(doc => {
+            onFileUpload(doc.data())
+        })
+    }).catch(function (error) {
+        console.log("Error getting document:", error);
+    });
+    // Create a reference with an initial file path and name
+    var storage = firebase.storage();
+    var ref = storage.ref(user.uid);
+    re
+}
 
 
 /***/ }),
@@ -85,43 +185,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return i; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return browse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return onFileUpload; });
-let i = 0
-function browse() {
-    document.getElementById('file').click();
-}
-function onFileUpload() {
-    let f = document.getElementById("file");
-    var fragment = document.createDocumentFragment();
-    var col = document.createElement('div')
-    col.id = 'col_' + i
-    i++;
-    col.classList.add('item');
-    col.style.width = '40%'
-    var label = document.createElement('span');
-    label.innerText = f.files[0].name;
-    col.appendChild(label)
-    var video = document.createElement('video');
-    video.id = 'video_' + i
-    video.style.width = '90%'
-    var fileURL = URL.createObjectURL(f.files[0]);
-    video.src = fileURL;
-    video.style.display = "block";
-    col.appendChild(video)
-    fragment.appendChild(col)
-    document.getElementById('wrapper').appendChild(fragment)
-    document.getElementById('video_' + i).setAttribute('controls', 'controls')
-}
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return fbLogin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getUserInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return fbLogout; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileOps_js__ = __webpack_require__(0);
+
+let user = {}
 function fbLogin() {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope('user_birthday');
@@ -133,10 +202,29 @@ function fbLogin() {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         var token = result.credential.accessToken;
         // The signed-in user info.
-        var user = result.user;
+        user = result.user;
         document.getElementById('wrapper').style.display = "block";
         document.getElementById('loginBtn').style.display = "none";
-        // ...
+        document.getElementById('logoutBtn').style.display = "block";
+        document.getElementById('userName').innerText = 'Welcome, ' + user.displayName;
+        document.getElementById('profilePic').src = user.photoURL;
+        document.getElementById('profilePic').style.width = '15%';
+        document.getElementById('profilePic').style.height = '15%';
+        document.getElementById('userName').style.display = "block"
+        document.getElementById('profilePic').style.display = "block";
+        document.getElementById('browse').style.display = "block";
+        var db = firebase.firestore();
+        db.collection("users").doc(user.uid).set({
+            name: user.displayName,
+            id: user.uid,
+            photoURL: user.photoURL,
+            email: user.email
+        }).then(function (res) {
+            console.log('added user to store')
+        }).catch(function (err) {
+            console.log(err)
+        })
+        Object(__WEBPACK_IMPORTED_MODULE_0__fileOps_js__["b" /* getAllVideos */])()
     }).catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -148,6 +236,39 @@ function fbLogin() {
         // ...
     });
 }
+function fbLogout() {
+    firebase.auth().signOut().then(function (res) {
+        document.getElementById('loginBtn').style.display = "block";
+        document.getElementById('logoutBtn').style.display = "none";
+        document.getElementById('wrapper').style.display = "none";
+        document.getElementById('userName').style.display = "none"
+        document.getElementById('profilePic').style.display = "none";
+        document.getElementById('browse').style.display = "none";
+    }).catch(function (err) {
+        console.log(err)
+    })
+}
+function getUserInfo() {
+    return user
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileOps_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__login_js__ = __webpack_require__(1);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["c"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "browse", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "onFileUpload", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["d"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "fbLogin", function() { return __WEBPACK_IMPORTED_MODULE_1__login_js__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "fbLogout", function() { return __WEBPACK_IMPORTED_MODULE_1__login_js__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "uploadToFirebase", function() { return __WEBPACK_IMPORTED_MODULE_0__fileOps_js__["e"]; });
+
+
 
 
 /***/ })
