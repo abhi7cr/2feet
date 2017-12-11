@@ -2,11 +2,12 @@
 
 .flexWrapper {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  padding: 5px;
 }
 
 .item {
-  flex-grow: 1 /* default 0 */
+  flex-grow: 1 ;/* default 0 */
+  margin: 5px;
+  flex: 200px;
 }

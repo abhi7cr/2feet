@@ -29,12 +29,14 @@
   firebase.initializeApp(config);
 </script>
 <template id="login">
+  <div id="loginDiv">
     <button id="loginBtn" onclick="TwoFeet.fbLogin()">Login</button>
     <button id="logoutBtn" style="display: none;" onclick="TwoFeet.fbLogout()">Logout</button>
+  </div>
 </template>
-<!--<link rel="import" href="login.html">-->
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
 <link rel="stylesheet" href="grid.css"/>
+<link rel="stylesheet" href="font-awesome.min.css"/>
 <script src = "bundle.js"></script>
 <script>
   var t = document.querySelector('#login');
@@ -44,20 +46,33 @@
 <style>
 button {
  text-align: center;
- background-color: orange;
  border-radius: 25px;
  width: 100px;
  height: 50px;
+ margin: 10px;
+}
+.videoTitle {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+#loginBtn:hover {
+    background-color:lightslategray;
+ }
+#loginBtn {
+  background-color: darkslateblue;
+  color:white;
 }
 .uploadBtn {
-  background-color:green;
+  background-color: darkgreen;
 }
 .uploadBtn:hover {
-  background-color:darkgreen;
+  background-color:green;
 }
-button:hover {
-    background-color: orangered;
- }
+#loginDiv {
+  margin: 0 auto;
+  width: 100px;
+}
  #load {
   background-color: greenyellow;
  }

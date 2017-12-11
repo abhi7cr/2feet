@@ -5,13 +5,25 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "deploy": "firebase deploy",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "npm run build && firebase deploy",
+    "watch": "webpack --progress --watch",
+    "start": "webpack-dev-server --open",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-server": "export NODE_ENV=development && node src/server/index.js",
+    "prod-server": "export NODE_ENV=production && node src/server/index.js"
   },
   "author": "abhi and avi",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^3.10.0"
+    "css-loader": "^0.28.7",
+    "express": "^4.16.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "node-sass": "^4.7.2",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^1.12.2",
+    "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
     "firebase": "^4.8.0"
